@@ -1,29 +1,44 @@
 import { Streamlit, RenderData } from "streamlit-component-lib"
 
-// Add text and a button to the DOM. (You could also add these directly
-// to index.html.)
-const span = document.body.appendChild(document.createElement("span"))
-const textNode = span.appendChild(document.createTextNode(""))
-const button = span.appendChild(document.createElement("button"))
-button.textContent = "Click Me!"
+class RippleComponent {
+  private rippleContainer: HTMLElement;
 
-// Add a click handler to our button. It will send data back to Streamlit.
-let numClicks = 0
-let isFocused = false
-button.onclick = function(): void {
-  // Increment numClicks, and pass the new value back to
-  // Streamlit via `Streamlit.setComponentValue`.
-  numClicks += 1
-  Streamlit.setComponentValue(numClicks)
+  constructor() {
+    this.rippleContainer = document.createElement("div");
+    this.rippleContainer.classList.add("ripple-container");
+    this.rippleContainer.style.border = "2px solid black";
+    this.rippleContainer.style.position = "relative";
+    this.rippleContainer.style.width = "100px";
+    this.rippleContainer.style.height = "100px";
+    document.body.appendChild(this.rippleContainer);
+
+    window.addEventListener("click", this.drawRipple.bind(this));
+  }
+
+  private drawRipple(ev: MouseEvent) {
+    const x = ev.clientX;
+    const y = ev.clientY;
+
+    const ripple = document.createElement("div");
+    ripple.classList.add("ripple");
+    ripple.style.left = x - this.rippleContainer.getBoundingClientRect().left + "px";
+    ripple.style.top = y - this.rippleContainer.getBoundingClientRect().top + "px";
+    ripple.style.width = "10px";
+    ripple.style.height = "10px";
+    ripple.style.borderRadius = "50%";
+    ripple.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+    ripple.style.position = "absolute";
+
+    this.rippleContainer.appendChild(ripple);
+
+    setTimeout(() => {
+      this.rippleContainer.removeChild(ripple);
+    }, 1000);
+  }
 }
 
-button.onfocus = function(): void {
-  isFocused = true
-}
+const rippleComponent = new RippleComponent();
 
-button.onblur = function(): void {
-  isFocused = false
-}
 
 /**
  * The component's render function. This will be called immediately after
@@ -39,15 +54,15 @@ function onRender(event: Event): void {
   if (data.theme) {
     // Use CSS vars to style our button border. Alternatively, the theme style
     // is defined in the data.theme object.
-    const borderStyling = `1px solid var(${
-      isFocused ? "--primary-color" : "gray"
-    })`
-    button.style.border = borderStyling
-    button.style.outline = borderStyling
+    // const borderStyling = `1px solid var(${
+    //   isFocused ? "--primary-color" : "gray"
+    // })`
+    // button.style.border = borderStyling
+    // button.style.outline = borderStyling
   }
 
   // Disable our button if necessary.
-  button.disabled = data.disabled
+  // button.disabled = data.disabled
 
   // RenderData.args is the JSON dictionary of arguments sent from the
   // Python script.
