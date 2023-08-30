@@ -6,10 +6,6 @@ class RippleComponent {
   constructor() {
     this.rippleContainer = document.createElement("div");
     this.rippleContainer.classList.add("ripple-container");
-    this.rippleContainer.style.border = "2px solid black";
-    this.rippleContainer.style.position = "relative";
-    this.rippleContainer.style.width = "100px";
-    this.rippleContainer.style.height = "100px";
     document.body.appendChild(this.rippleContainer);
 
     window.addEventListener("click", this.drawRipple.bind(this));
@@ -23,11 +19,7 @@ class RippleComponent {
     ripple.classList.add("ripple");
     ripple.style.left = x - this.rippleContainer.getBoundingClientRect().left + "px";
     ripple.style.top = y - this.rippleContainer.getBoundingClientRect().top + "px";
-    ripple.style.width = "10px";
-    ripple.style.height = "10px";
-    ripple.style.borderRadius = "50%";
-    ripple.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
-    ripple.style.position = "absolute";
+    ripple.classList.add("animate");
 
     this.rippleContainer.appendChild(ripple);
 
