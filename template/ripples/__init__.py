@@ -40,7 +40,7 @@ else:
 # `declare_component` and call it done. The wrapper allows us to customize
 # our component's API: we can pre-process its input args, post-process its
 # output value, and add a docstring for users.
-def ripples(key=None, color="#050609"):
+def ripples(key=None, color="#050609", height=100):
     """Create a new instance of "ripples".
 
     Parameters
@@ -49,6 +49,10 @@ def ripples(key=None, color="#050609"):
         An optional key that uniquely identifies this component. If this is
         None, and the component's arguments are changed, the component will
         be re-mounted in the Streamlit frontend and lose its current state.
+    color: str or #050609
+        Color of ripple
+    height: int or 100
+        Height of area that has ripple effect
 
     Returns
     -------
@@ -64,7 +68,7 @@ def ripples(key=None, color="#050609"):
     #
     # "default" is a special argument that specifies the initial return
     # value of the component before the user has interacted with it.
-    component_value = _component_func(key=key, color=color, default=0)
+    component_value = _component_func(key=key, color=color, height=height, default=0)
 
     # We could modify the value returned from the component if we wanted.
     # There's no need to do this in our simple example - but it's an option.

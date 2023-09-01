@@ -3,4 +3,4 @@ from ripples import ripples
 
 st.title('Ripples...')
 
-ripples("ripple", "#32a852")
+ripples("ripple", "#32a852", 200)

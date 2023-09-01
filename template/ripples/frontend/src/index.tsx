@@ -1,12 +1,13 @@
 import { Streamlit, RenderData } from "streamlit-component-lib"
 
 class RippleComponent {
+  public rippleContainer: HTMLElement;
   public rippleColor: string;
-  private rippleContainer: HTMLElement;
 
-  constructor() {
+  constructor(height: number) {
     this.rippleContainer = document.createElement("div");
     this.rippleContainer.classList.add("ripple-container");
+    this.rippleContainer.style.height = height + "px";
     this.rippleColor = "#050609";
     document.body.appendChild(this.rippleContainer);
   }
@@ -20,7 +21,6 @@ class RippleComponent {
     ripple.style.left = x - this.rippleContainer.getBoundingClientRect().left + "px";
     ripple.style.top = y - this.rippleContainer.getBoundingClientRect().top + "px";
     ripple.style.background = this.rippleColor;
-    console.log(this.rippleColor)
     ripple.classList.add("animate");
 
     this.rippleContainer.appendChild(ripple);
@@ -29,9 +29,13 @@ class RippleComponent {
       this.rippleContainer.removeChild(ripple);
     }, 1000);
   }
+
+  public setHeight(height: string) {
+    this.rippleContainer.style.height = height + "px";
+  }
 }
 
-const rippleComponent = new RippleComponent();
+const rippleComponent = new RippleComponent(100);
 
 
 /**
@@ -47,9 +51,11 @@ function onRender(event: Event): void {
   // RenderData.args is the JSON dictionary of arguments sent from the
   // Python script.
   let color = data.args["color"]
+  let height = data.args["height"]
   if (color !== "#050609" || color !== "#ffffff") {
     rippleComponent.rippleColor = color;
   }
+  rippleComponent.setHeight(height);
   window.addEventListener("click", rippleComponent.drawRipple.bind(rippleComponent));
 
   // We tell Streamlit to update our frameHeight after each render event, in
