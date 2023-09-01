@@ -43,20 +43,14 @@ function onRender(event: Event): void {
   // Get the RenderData from the event
   const data = (event as CustomEvent<RenderData>).detail
 
-  // Maintain compatibility with older versions of Streamlit that don't send
-  // a theme object.
-  if (data.theme?.base === "dark") {
-    // The theme style is defined in the data.theme object.
-    rippleComponent.rippleColor = "#ffffff"
-  }
-  window.addEventListener("click", rippleComponent.drawRipple.bind(rippleComponent));
-
+  rippleComponent.rippleColor = data.theme?.base === 'light' ? "#050609" : "#ffffff"
   // RenderData.args is the JSON dictionary of arguments sent from the
   // Python script.
-  // let name = data.args["name"]
-
-  // Show "Hello, name!" with a non-breaking space afterwards.
-  // textNode.textContent = `Hello, ${name}! ` + String.fromCharCode(160)
+  let color = data.args["color"]
+  if (color !== "#050609" || color !== "#ffffff") {
+    rippleComponent.rippleColor = color;
+  }
+  window.addEventListener("click", rippleComponent.drawRipple.bind(rippleComponent));
 
   // We tell Streamlit to update our frameHeight after each render event, in
   // case it has changed. (This isn't strictly necessary for the example
