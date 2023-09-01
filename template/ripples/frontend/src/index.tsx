@@ -1,17 +1,17 @@
 import { Streamlit, RenderData } from "streamlit-component-lib"
 
 class RippleComponent {
+  public rippleColor: string;
   private rippleContainer: HTMLElement;
 
   constructor() {
     this.rippleContainer = document.createElement("div");
     this.rippleContainer.classList.add("ripple-container");
+    this.rippleColor = "#050609";
     document.body.appendChild(this.rippleContainer);
-
-    window.addEventListener("click", this.drawRipple.bind(this));
   }
 
-  private drawRipple(ev: MouseEvent) {
+  public drawRipple(ev: MouseEvent) {
     const x = ev.clientX;
     const y = ev.clientY;
 
@@ -19,6 +19,8 @@ class RippleComponent {
     ripple.classList.add("ripple");
     ripple.style.left = x - this.rippleContainer.getBoundingClientRect().left + "px";
     ripple.style.top = y - this.rippleContainer.getBoundingClientRect().top + "px";
+    ripple.style.background = this.rippleColor;
+    console.log(this.rippleColor)
     ripple.classList.add("animate");
 
     this.rippleContainer.appendChild(ripple);
@@ -43,18 +45,11 @@ function onRender(event: Event): void {
 
   // Maintain compatibility with older versions of Streamlit that don't send
   // a theme object.
-  if (data.theme) {
-    // Use CSS vars to style our button border. Alternatively, the theme style
-    // is defined in the data.theme object.
-    // const borderStyling = `1px solid var(${
-    //   isFocused ? "--primary-color" : "gray"
-    // })`
-    // button.style.border = borderStyling
-    // button.style.outline = borderStyling
+  if (data.theme?.base === "dark") {
+    // The theme style is defined in the data.theme object.
+    rippleComponent.rippleColor = "#ffffff"
   }
-
-  // Disable our button if necessary.
-  // button.disabled = data.disabled
+  window.addEventListener("click", rippleComponent.drawRipple.bind(rippleComponent));
 
   // RenderData.args is the JSON dictionary of arguments sent from the
   // Python script.
